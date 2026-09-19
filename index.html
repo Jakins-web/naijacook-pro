@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F0E3">
+<title>NaijaCook Pro</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Caveat:wght@600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="logo">NaijaCook<span>Pro</span></div>
+  <div class="conn-status" id="connStatus">
+    <span class="dot" id="connDot"></span>
+    <span id="connText">Demo mode</span>
+  </div>
+</header>
+
+<!-- PAGE: HOME -->
+<main id="page-home" class="page active">
+
+  <div class="page-heading">
+    <h1 class="app-heading">NaijaCook Pro</h1>
+    <p class="app-tagline script">Smart cooking, real Naija flavour</p>
+  </div>
+
+  <div class="section-label">Featured</div>
+  <div class="featured-card">
+    <div class="hero-img-wrap" id="heroImgWrap"></div>
+    <span class="hero-badge">★ Popular</span>
+    <h2 class="hero-food-name" id="heroName">Jollof Rice</h2>
+    <p class="hero-meta" id="heroMeta">Serves 2 · ~35 min</p>
+    <p class="hero-desc">Perfectly measured, automatically cooked — no stirring needed.</p>
+    <button class="btn hero-cta" id="btnHeroCook">Cook jollof rice →</button>
+  </div>
+
+  <div class="section-label">System status</div>
+  <div class="machine-head">
+    <span class="machine-icon">🫕</span>
+    <div class="machine-head-text">
+      <strong>NaijaCook Pro</strong>
+      <span id="machineHeadSub">All systems normal</span>
+    </div>
+  </div>
+  <div class="status-card">
+    <div class="status-row">
+      <span class="sr-icon sr-icon-status">⚙️</span>
+      <span class="label">Machine status</span>
+      <span class="value" id="homeStatus">Idle</span>
+    </div>
+    <div class="status-row">
+      <span class="sr-icon sr-icon-temp">🌡️</span>
+      <span class="label">Temperature</span>
+      <span class="value amber" id="homeTemp">--°C</span>
+    </div>
+    <div class="status-row">
+      <span class="sr-icon sr-icon-weight">⚖️</span>
+      <span class="label">Pot weight</span>
+      <span class="value green" id="homeWeight">--g</span>
+    </div>
+  </div>
+
+  <div class="section-label">Quick actions</div>
+  <div class="quick-actions">
+    <button class="qa-tile" id="btnSelectFood" type="button">
+      <span class="qa-icon-badge">🍳</span>
+      <span class="qa-text"><strong>Select food</strong><em>Pick a meal to cook →</em></span>
+    </button>
+    <button class="qa-tile" id="btnGotoSchedule" type="button">
+      <span class="qa-icon-badge">📅</span>
+      <span class="qa-text"><strong>Schedule cook</strong><em>Set time & date →</em></span>
+    </button>
+  </div>
+
+  <div class="section-label">Notifications</div>
+  <div class="notif-list" id="notifList"></div>
+
+  <div class="quote-card">
+    <span class="quote-icon">🌱</span>
+    <p class="quote-title script">Good food, good mood, family &amp; tradition</p>
+  </div>
+</main>
+
+<!-- PAGE: FOOD SELECT -->
+<main id="page-food" class="page">
+  <button class="back-btn" id="btnBackHome">← Back</button>
+  <h2 class="page-title">Select food</h2>
+  <p class="hint" style="margin-top:-8px;">Tap a dish to see its ingredients and set servings.</p>
+  <div class="food-grid" id="foodGrid"></div>
+</main>
+
+<!-- PAGE: RECIPE DETAIL (servings + full ingredient breakdown before starting) -->
+<main id="page-recipe" class="page">
+  <button class="back-btn" id="btnBackRecipe">← Back</button>
+  <div class="recipe-head">
+    <span class="recipe-emoji" id="recipeEmoji"></span>
+    <div>
+      <h2 class="page-title" id="recipeName" style="margin:0 0 2px;">Jollof Rice</h2>
+      <span class="recipe-tagline" id="recipeTagline">A NaijaCook Pro classic</span>
+    </div>
+  </div>
+
+  <div class="prep-banner hidden" id="prepBanner"></div>
+
+  <div class="gram-row">
+    <label>Servings</label>
+    <div class="gram-control">
+      <button class="gram-btn" id="servMinus">−</button>
+      <span id="servValue">2</span>
+      <button class="gram-btn" id="servPlus">+</button>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:8px;">Ingredients for this batch</div>
+  <div class="ingredient-list" id="ingredientList"></div>
+
+  <div class="readout-grid" style="margin-top:16px;">
+    <div class="readout-box">
+      <span class="ro-label">Est. cook time</span>
+      <span class="ro-value amber" id="recipeTime">30 min</span>
+    </div>
+    <div class="readout-box">
+      <span class="ro-label">Est. water</span>
+      <span class="ro-value green" id="recipeWater">480 ml</span>
+    </div>
+  </div>
+
+  <button class="btn btn-start" id="btnGoStart">▶ Start cook</button>
+  <button class="btn btn-outline" id="btnGoScheduleFromRecipe" style="margin-top:10px;">Schedule for later →</button>
+</main>
+
+<!-- PAGE: COOKING (live monitor) -->
+<main id="page-cooking" class="page">
+  <button class="back-btn" id="btnBackFood">← Back</button>
+  <h2 class="page-title" id="cookFoodName">Cooking</h2>
+
+  <div class="readout-grid">
+    <div class="readout-box">
+      <span class="ro-label">Temp</span>
+      <span class="ro-value amber" id="cookTemp">--°C</span>
+    </div>
+    <div class="readout-box">
+      <span class="ro-label">Weight</span>
+      <span class="ro-value green" id="cookWeight">--g</span>
+    </div>
+  </div>
+
+  <div class="progress-section" id="progressSection">
+    <div class="progress-header">
+      <span>Progress</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="status-line" id="cookStatus">Status: idle</div>
+    <div class="time-remaining hidden" id="cookTimeRemaining"></div>
+  </div>
+
+  <div class="empty-state" id="cookEmptyState">
+    <span class="empty-emoji">🍲</span>
+    <p>Nothing cooking right now.</p>
+    <button class="btn btn-outline" id="btnEmptyGoFood">Pick something to cook →</button>
+  </div>
+
+  <button class="btn btn-abort hidden" id="btnAbortCook">■ Abort</button>
+</main>
+
+<!-- PAGE: SCHEDULE -->
+<main id="page-schedule" class="page">
+  <button class="back-btn" id="btnBackSchedule">← Back</button>
+  <h2 class="page-title">Schedule a cook</h2>
+  <p class="script schedule-tag">Set it, forget it.</p>
+  <p class="hint schedule-intro">Choose a time and NaijaCook Pro starts cooking automatically — even if you're not home. Perfect for walking in to a hot meal.</p>
+
+  <div class="schedule-card">
+    <div class="schedule-summary" id="scheduleSummary"></div>
+    <p class="hint" style="margin-top:14px;">Set a time and the machine starts automatically — even while you're away.</p>
+    <input type="time" id="scheduleTime" class="time-input">
+    <button class="btn btn-sub" id="btnSchedule">Set schedule</button>
+    <div class="scheduled-info" id="scheduledInfo"></div>
+  </div>
+
+  <div class="schedule-tips">
+    <div class="tip-row"><span class="tip-icon">⏰</span><span>Works even while the app is closed, as long as the machine stays powered on.</span></div>
+    <div class="tip-row"><span class="tip-icon">🍚</span><span>Double-check the dish and servings you last selected before scheduling.</span></div>
+  </div>
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottomnav">
+  <button class="nav-btn active" data-page="page-home">
+    <span class="nav-icon">🏠</span><span>Home</span>
+  </button>
+  <button class="nav-btn" data-page="page-food">
+    <span class="nav-icon">🍽</span><span>Foods</span>
+  </button>
+  <button class="nav-btn" data-page="page-cooking">
+    <span class="nav-icon">🍲</span><span>Cooking</span>
+  </button>
+  <button class="nav-btn" id="navSettings">
+    <span class="nav-icon">⚙</span><span>Settings</span>
+  </button>
+</nav>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay hidden" id="settingsModal">
+  <div class="modal">
+    <h3>Settings</h3>
+    <p class="hint">Firebase connection status</p>
+    <div class="settings-row">
+      <span>Mode</span>
+      <span id="modeLabel">Demo (no Firebase configured)</span>
+    </div>
+    <div class="settings-row">
+      <span>Machine ID</span>
+      <span>naijacook_pro_01</span>
+    </div>
+    <p class="hint" style="margin-top:16px;">To connect to your real machine, edit <code>firebase-config.js</code> with your Firebase project credentials.</p>
+    <button class="btn btn-outline" id="closeSettings">Close</button>
+  </div>
+</div>
+
+<!-- START CONFIRMATION SHEET -->
+<div class="modal-overlay hidden" id="startSheet">
+  <div class="modal sheet-modal">
+    <h3 id="sheetTitle">Start cooking?</h3>
+    <div class="sheet-summary" id="sheetSummary"></div>
+    <div class="sheet-btns">
+      <button class="btn btn-outline" id="sheetCancel">Cancel</button>
+      <button class="btn btn-start" id="sheetConfirm">Start</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>

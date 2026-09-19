@@ -1,0 +1,18 @@
+{
+  "rules": {
+    "appliance": {
+      "control": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      },
+      "telemetry": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "$other": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
