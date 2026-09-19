@@ -3,7 +3,7 @@
 // Live data (telemetry, control commands) always goes straight to
 // Firebase over the network and is never cached here.
 
-const CACHE_NAME = 'naijacook-shell-v2';
+const CACHE_NAME = 'naijacook-shell-v3';
 const SHELL_FILES = [
   './',
   './index.html',
