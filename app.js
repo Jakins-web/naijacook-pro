@@ -1,11 +1,3 @@
-// ============================================================
-//  NaijaCook Pro — mobile app logic
-//  Talks to Firebase RTDB at /appliance/control (commands out)
-//  and /appliance/telemetry (live state in), matching the ESP32
-//  gateway schema. Falls back to a local demo simulation when no
-//  Firebase project is configured (see firebase-config.js).
-// ============================================================
-
 import { db, ref, set, onValue, DEMO_MODE, authReady } from './firebase-config.js';
 
 const $ = (id) => document.getElementById(id);
@@ -16,11 +8,6 @@ const MAX_SERVINGS = 8;
 // ── Recipe model — mirrors the machine's 4 auger/shutter slots
 // (rice, beans, yam, mixed-vegetables), the water/oil pumps, and
 // the 8-pod spice revolver. Amounts below are per BASE_SERVINGS (2).
-//
-// `img` is the filename of each dish's photo. These are assumed to sit
-// in this SAME folder, named after the recipe key (e.g. white_rice.jpg).
-// If your actual filenames differ, this is the one place to fix it --
-// nothing else in the app needs to change.
 const RECIPES = {
   white_rice: {
     name: 'White Rice', img: 'white_rice.jpg', tagline: 'Simple, fluffy, no fuss',
@@ -370,9 +357,12 @@ function setConn(state) {
 // ── Live Firebase telemetry, or local demo simulation ──
 if (!DEMO_MODE) {
   authReady.then(() => {
+    setConn('live');   // auth + listener attached successfully -- this IS "connected",
+                        // independent of whether the physical machine has ever reported
+                        // telemetry yet (that's a separate "is the machine on" question)
     onValue(ref(db, 'appliance/telemetry'), (snap) => {
       const data = snap.val();
-      if (data) { setConn('live'); applyTelemetry(data); }
+      if (data) applyTelemetry(data);
     }, () => setConn('error'));
   }).catch((err) => {
     console.error('Auth failed, telemetry not connected:', err);
